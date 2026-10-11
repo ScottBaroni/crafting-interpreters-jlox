@@ -1,0 +1,3 @@
+print "before";
+/* this comment never closes
+print "unreachable";

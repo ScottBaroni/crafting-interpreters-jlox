@@ -1,0 +1,5 @@
+/* outer comment
+   /* nested comment */
+   still in outer comment
+*/
+print "after comments";
