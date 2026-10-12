@@ -23,10 +23,48 @@ class Parser {
     }
 
     private Expr expression() {
-        return equality();
+        return comma();
+    }
+
+    // Challenge 1: comma operator. Lowest precedence, left-associative.
+    // comma -> ternary ( "," ternary )* ;
+    private Expr comma() {
+        Expr expr = ternary();
+
+        while (match(COMMA)) {
+            Token operator = previous();
+            Expr right = ternary();
+            expr = new Expr.Binary(expr, operator, right);
+        }
+
+        return expr;
+    }
+
+    // Challenge 2: conditional operator. Right-associative; any full
+    // expression is allowed between "?" and ":".
+    // ternary -> equality ( "?" expression ":" ternary )? ;
+    private Expr ternary() {
+        Expr expr = equality();
+
+        if (match(QUESTION)) {
+            Expr thenBranch = expression();
+            consume(COLON, "Expect ':' after then branch of ternary expression.");
+            Expr elseBranch = ternary();
+            expr = new Expr.Ternary(expr, thenBranch, elseBranch);
+        }
+
+        return expr;
     }
 
     private Expr equality() {
+        // Challenge 3: error production, missing left-hand operand.
+        if (match(BANG_EQUAL, EQUAL_EQUAL)) {
+            Token operator = previous();
+            error(operator, "Missing left-hand operand.");
+            comparison(); // Parse and discard the right-hand operand.
+            return new Expr.Literal(null);
+        }
+
         Expr expr = comparison();
 
         while (match(BANG_EQUAL, EQUAL_EQUAL)) {
@@ -39,6 +77,13 @@ class Parser {
     }
 
     private Expr comparison() {
+        if (match(GREATER, GREATER_EQUAL, LESS, LESS_EQUAL)) {
+            Token operator = previous();
+            error(operator, "Missing left-hand operand.");
+            term();
+            return new Expr.Literal(null);
+        }
+
         Expr expr = term();
 
         while (match(GREATER, GREATER_EQUAL, LESS, LESS_EQUAL)) {
@@ -51,6 +96,15 @@ class Parser {
     }
 
     private Expr term() {
+        // Only "+" is checked here. "-" can legally start an expression
+        // as unary negation, so a leading "-" is not an error.
+        if (check(PLUS)) {
+            Token operator = advance();
+            error(operator, "Missing left-hand operand.");
+            factor();
+            return new Expr.Literal(null);
+        }
+
         Expr expr = factor();
 
         while (match(MINUS, PLUS)) {
@@ -63,6 +117,13 @@ class Parser {
     }
 
     private Expr factor() {
+        if (match(SLASH, STAR)) {
+            Token operator = previous();
+            error(operator, "Missing left-hand operand.");
+            unary();
+            return new Expr.Literal(null);
+        }
+
         Expr expr = unary();
 
         while (match(SLASH, STAR)) {
