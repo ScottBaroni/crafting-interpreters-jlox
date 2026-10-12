@@ -45,7 +45,7 @@ configuration's program arguments.
 |---------|-------|--------|------------------------------|
 | 4 | Scanning | `ch04-challenges` | Done (nested block comments) |
 | 5 | Representing Code | `ch05-challenges` | Done (RPN printer)           |
-| 6 | Parsing Expressions | `ch06-challenges` | Planned                      |
+| 6 | Parsing Expressions | `ch06-challenges` | Done (challenges 1-3)                      |
 | 7 | Evaluating Expressions | `ch07-challenges` | Planned                      |
 | 8 | Statements and State | `ch08-challenges` | Planned                      |
 | 9 | Control Flow | `ch09-challenges` | Planned                      |
