@@ -46,9 +46,13 @@ configuration's program arguments.
 | 4 | Scanning | `ch04-challenges` | Done (nested block comments) |
 | 5 | Representing Code | `ch05-challenges` | Done (RPN printer)           |
 | 6 | Parsing Expressions | `ch06-challenges` | Done (challenges 1-3)                      |
-| 7 | Evaluating Expressions | `ch07-challenges` | Planned                      |
+| 7 | Evaluating Expressions | `ch07-challenges` | Done (challenges 2-3)                      |
 | 8 | Statements and State | `ch08-challenges` | Planned                      |
-| 9 | Control Flow | `ch09-challenges` | Planned                      |
+| 9 | Control Flow | `ch09-challenges` | Planned |
+| 10 | Functions | `ch10-challenges` | Planned |
+| 11 | Resolving and Binding | `ch11-challenges` | Planned |
+| 12 | Classes | `ch12-challenges` | Planned |
+| 13 | Inheritance | `ch13-challenges` | Planned |
 
 Design-only challenges (written answers, no code) are not in this repo.
 
