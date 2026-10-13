@@ -42,6 +42,16 @@ class AstPrinter implements Expr.Visitor<String> {
         return parenthesize(expr.operator.lexeme, expr.left, expr.right);
     }
 
+    @Override
+    public String visitCallExpr(Expr.Call expr) {
+        Expr[] all = new Expr[expr.arguments.size() + 1];
+        all[0] = expr.callee;
+        for (int i = 0; i < expr.arguments.size(); i++) {
+            all[i + 1] = expr.arguments.get(i);
+        }
+        return parenthesize("call", all);
+    }
+
     private String parenthesize(String name, Expr... exprs) {
         StringBuilder builder = new StringBuilder();
 

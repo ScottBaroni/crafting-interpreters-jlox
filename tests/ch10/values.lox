@@ -1,0 +1,12 @@
+fun add(a, b) {
+  print a + b;
+}
+print add;
+print clock;
+fun procedure() {
+  print "don't return anything";
+}
+var result = procedure();
+print result;
+var t = clock();
+print t > 0;
