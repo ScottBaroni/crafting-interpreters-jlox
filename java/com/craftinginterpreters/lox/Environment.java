@@ -6,6 +6,10 @@ import java.util.Map;
 class Environment {
     final Environment enclosing;
     private final Map<String, Object> values = new HashMap<>();
+    // Challenge 2: marks a variable that was declared without an
+    // initializer. This is a distinct object, not null, because null is
+    // how Lox's nil is represented.
+    private static final Object UNINITIALIZED = new Object();
 
     Environment() {
         enclosing = null;
@@ -17,7 +21,12 @@ class Environment {
 
     Object get(Token name) {
         if (values.containsKey(name.lexeme)) {
-            return values.get(name.lexeme);
+            Object value = values.get(name.lexeme);
+            if (value == UNINITIALIZED) {
+                throw new RuntimeError(name,
+                        "Uninitialized variable '" + name.lexeme + "'.");
+            }
+            return value;
         }
 
         if (enclosing != null) return enclosing.get(name);
@@ -43,5 +52,9 @@ class Environment {
 
     void define(String name, Object value) {
         values.put(name, value);
+    }
+
+    void defineUninitialized(String name) {
+        values.put(name, UNINITIALIZED);
     }
 }

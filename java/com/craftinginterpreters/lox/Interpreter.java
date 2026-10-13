@@ -7,9 +7,23 @@ class Interpreter implements Expr.Visitor<Object>,
     private Environment environment = new Environment();
 
     void interpret(List<Stmt> statements) {
+        interpret(statements, false);
+    }
+
+    // Challenge 1: in REPL mode, if the last statement is a bare
+    // expression statement, evaluate it and print the result instead of
+    // discarding it.
+    void interpret(List<Stmt> statements, boolean repl) {
         try {
-            for (Stmt statement : statements) {
-                execute(statement);
+            for (int i = 0; i < statements.size(); i++) {
+                Stmt statement = statements.get(i);
+                if (repl && i == statements.size() - 1 &&
+                        statement instanceof Stmt.Expression) {
+                    Object value = evaluate(((Stmt.Expression) statement).expression);
+                    System.out.println(stringify(value));
+                } else {
+                    execute(statement);
+                }
             }
         } catch (RuntimeError error) {
             Lox.runtimeError(error);
@@ -69,11 +83,13 @@ class Interpreter implements Expr.Visitor<Object>,
 
     @Override
     public Void visitVarStmt(Stmt.Var stmt) {
-        Object value = null;
-        if (stmt.initializer != null) {
-            value = evaluate(stmt.initializer);
+        // Challenge 2: no initializer means "declared but not yet assigned".
+        if (stmt.initializer == null) {
+            environment.defineUninitialized(stmt.name.lexeme);
+            return null;
         }
 
+        Object value = evaluate(stmt.initializer);
         environment.define(stmt.name.lexeme, value);
         return null;
     }
