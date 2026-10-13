@@ -1,0 +1,12 @@
+if (true) print "then"; else print "else";
+if (false) print "then"; else print "else";
+if (nil) print "nil is falsey";
+if (0) print "0 is truthy";
+
+// dangling else binds to the nearest if
+if (true) if (false) print "inner then"; else print "inner else";
+
+print "hi" or 2;
+print nil or "yes";
+print false and boom;
+print true and "both";
