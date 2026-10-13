@@ -1,0 +1,12 @@
+   print "one";
+   print true;
+   print 2 + 1;
+   var beverage = "espresso";
+   print beverage;
+   var x = 1;
+   var y = 2;
+   print x + y;
+   print x = 5;
+   print x;
+   var u;
+   print u;
