@@ -147,6 +147,12 @@ class Resolver implements Expr.Visitor<Void>, Stmt.Visitor<Void> {
             }
             resolveFunction(method, declaration);
         }
+        for (Stmt.Function method : stmt.classMethods) {
+            beginScope();
+            scopes.peek().put("this", true);
+            resolveFunction(method, FunctionType.METHOD);
+            endScope();
+        }
         endScope();
         currentClass = enclosingClass;
         return null;
@@ -221,14 +227,16 @@ class Resolver implements Expr.Visitor<Void>, Stmt.Visitor<Void> {
         }
     }
 
-    private void resolveFunction(
-            Stmt.Function function, FunctionType type) {
+    private void resolveFunction(Stmt.Function function, FunctionType type) {
         FunctionType enclosingFunction = currentFunction;
         currentFunction = type;
+
         beginScope();
-        for (Token param : function.params) {
-            declare(param);
-            define(param);
+        if (function.params != null) {
+            for (Token param : function.params) {
+                declare(param);
+                define(param);
+            }
         }
         resolve(function.body);
         endScope();
